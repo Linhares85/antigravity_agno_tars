@@ -26,7 +26,7 @@ AGENT_STORAGE = "tmp/agents.db"
 # AGENTE TARS PRINCIPAL - Gestão e Estratégia
 # =============================================================================
 tars_agent = Agent(
-    name="TARS - Gestão",
+    name="TARS_Gestao",
     model=OpenAIChat(id="gpt-4o"),
     tools=[DuckDuckGoTools()],
     instructions=[
@@ -47,7 +47,7 @@ tars_agent = Agent(
 # AGENTE DE PESQUISA - Análise de Mercado e Tendências
 # =============================================================================
 research_agent = Agent(
-    name="TARS - Pesquisa",
+    name="TARS_Pesquisa",
     model=OpenAIChat(id="gpt-4o"),
     tools=[DuckDuckGoTools()],
     instructions=[
@@ -68,7 +68,7 @@ research_agent = Agent(
 # AGENTE DE PRODUTIVIDADE - Tarefas e Organização
 # =============================================================================
 productivity_agent = Agent(
-    name="TARS - Produtividade",
+    name="TARS_Produtividade",
     model=OpenAIChat(id="gpt-4o"),
     tools=[DuckDuckGoTools()],
     instructions=[
@@ -89,7 +89,7 @@ productivity_agent = Agent(
 # AGENTE SUPERVISOR - Visão Global e Delegação
 # =============================================================================
 supervisor_agent = Agent(
-    name="TARS - Supervisor",
+    name="TARS_Supervisor",
     model=OpenAIChat(id="gpt-4o"),
     team=[tars_agent, research_agent, productivity_agent],
     tools=[DuckDuckGoTools(), SupabaseTools(), VectorSearchTools(), PostgresTools()],

@@ -28,7 +28,7 @@ AGENT_STORAGE = "tmp/agents.db"
 # =============================================================================
 
 tars_agent = Agent(
-    name="TARS - Gestão",
+    name="TARS_Gestao",
     model=OpenAIChat(id="gpt-4o"),
     tools=[DuckDuckGoTools(), SupabaseTools()],  # TARS tem visão geral
     instructions=[
@@ -47,7 +47,7 @@ tars_agent = Agent(
 )
 
 research_agent = Agent(
-    name="TARS - Pesquisa",
+    name="TARS_Pesquisa",
     model=OpenAIChat(id="gpt-4o"),
     tools=[DuckDuckGoTools(), SupabaseTools()],
     instructions=[
@@ -63,7 +63,7 @@ research_agent = Agent(
 )
 
 productivity_agent = Agent(
-    name="TARS - Produtividade",
+    name="TARS_Produtividade",
     model=OpenAIChat(id="gpt-4o"),
     tools=[DuckDuckGoTools()],
     instructions=[
@@ -82,7 +82,7 @@ productivity_agent = Agent(
 # =============================================================================
 
 support_agent = Agent(
-    name="Selly Suporte",
+    name="Selly_Suporte",
     model=OpenAIChat(id="gpt-4o"),
     tools=[SupabaseTools(), VectorSearchTools()],
     instructions=[
@@ -163,7 +163,7 @@ support_agent = Agent(
 )
 
 sales_agent = Agent(
-    name="Selly Vendas",
+    name="Selly_Vendas",
     model=OpenAIChat(id="gpt-4o"),
     tools=[SupabaseTools(), VectorSearchTools()],
     instructions=[
@@ -229,7 +229,7 @@ sales_agent = Agent(
 )
 
 tech_agent = Agent(
-    name="Atendimento - Especialista Técnico",
+    name="Atendimento_Tecnico",
     model=OpenAIChat(id="gpt-4o"),
     tools=[DuckDuckGoTools(), SupabaseTools()], # Acesso a logs/tickets
     instructions=[
@@ -249,7 +249,7 @@ tech_agent = Agent(
 # AGENTE SUPERVISOR GLOBAL (Delegador principal)
 # =============================================================================
 supervisor_agent = Agent(
-    name="TARS - Supervisor Global",
+    name="TARS_Supervisor_Global",
     model=OpenAIChat(id="gpt-4o"),
     team=[tars_agent, research_agent, productivity_agent, support_agent, sales_agent, tech_agent],
     tools=[DuckDuckGoTools(), SupabaseTools(), VectorSearchTools(), PostgresTools()],
