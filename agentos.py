@@ -17,6 +17,7 @@ from agno.db.sqlite import SqliteDb
 from agno.tools.duckduckgo import DuckDuckGoTools
 from supabase_tools import SupabaseTools
 from knowledge_base import VectorSearchTools
+from postgres_tools import PostgresTools
 
 # Caminho do banco de dados para armazenar sessões
 AGENT_STORAGE = "tmp/agents.db"
@@ -91,12 +92,13 @@ supervisor_agent = Agent(
     name="TARS - Supervisor",
     model=OpenAIChat(id="gpt-4o"),
     team=[tars_agent, research_agent, productivity_agent],
-    tools=[DuckDuckGoTools(), SupabaseTools(), VectorSearchTools()],
+    tools=[DuckDuckGoTools(), SupabaseTools(), VectorSearchTools(), PostgresTools()],
     instructions=[
         "Você é o Agente Supervisor do sistema TARS.",
         "Você tem visão global da arquitetura e acesso TOTAL ao banco de dados.",
-        "Use 'SupabaseTools' para consultar tabelas tradicionais (SQL).",
-        "Use 'VectorSearchTools' para consultar a base de conhecimento (Vector BD - WaSeller e FlowSeller).",
+        "Use 'SupabaseTools' para operações simples de REST API.",
+        "Use 'VectorSearchTools' para consultar a base vetorial (WaSeller e FlowSeller).",
+        "Use 'PostgresTools' para executar comandos/queries em banco (SQL cru) como JOINs complexos, tabelas não-públicas ou contagens avançadas.",
         "Você pode e deve delegar tarefas para os especialistas da sua equipe (Gestão, Pesquisa e Produtividade).",
         "Sempre determine qual agente é o mais adequado para resolver a solicitação do usuário antes de delegar.",
         "Fale em português brasileiro.",

@@ -18,6 +18,7 @@ from agno.storage.sqlite import SqliteStorage
 from agno.tools.duckduckgo import DuckDuckGoTools
 from supabase_tools import SupabaseTools
 from knowledge_base import VectorSearchTools
+from postgres_tools import PostgresTools
 
 # Caminho do banco de dados para armazenar sessões
 AGENT_STORAGE = "tmp/agents.db"
@@ -251,13 +252,16 @@ supervisor_agent = Agent(
     name="TARS - Supervisor Global",
     model=OpenAIChat(id="gpt-4o"),
     team=[tars_agent, research_agent, productivity_agent, support_agent, sales_agent, tech_agent],
-    tools=[DuckDuckGoTools(), SupabaseTools(), VectorSearchTools()],
+    tools=[DuckDuckGoTools(), SupabaseTools(), VectorSearchTools(), PostgresTools()],
     instructions=[
         "Você é o Diretor/Supervisor Global do sistema TARS e da base de Atendimento.",
-        "Você interliga a arquitetura, tendo acesso integral e TOTAL ao banco de dados via SupabaseTools (tabelas) e VectorSearchTools (vetores) e coordena de toda a equipe de agentes.",
-        "Receba a requisição do usuário, avalie qual área (Estratégico, Suporte, Vendas, Técnico) é necessária e delegue a tarefa para o agente mais qualificado.",
-        "Forneça respostas sintéticas repassando os insights da sua equipe.",
-        "Fale sempre em português brasileiro de forma polida e gerencial.",
+        "Você interliga a arquitetura, gerencia todos os agentes e tem acesso direto (SQL puro) ao banco de dados.",
+        "FERRAMENTAS DE DADOS:",
+        "1. SupabaseTools: Para consultas e operações REST/JSON básicas.",
+        "2. VectorSearchTools: Para buscar na base de conhecimento (Vector DB).",
+        "3. PostgresTools (SQL RAW): Para criar relatórios detalhados, rodar consultas avançadas de negócio (SQL complexo) e criar/modificar dados avançados.",
+        "Receba a requisição do usuário, avalie qual área (Estratégico, Suporte, Vendas, Técnico) é mais adequada e delegue a tarefa, cruzando caso necessário informações geradas por você no banco.",
+        "Forneça respostas sintéticas condensando os insights em português brasileiro gerencial.",
     ],
     storage=SqliteStorage(table_name="tars_supervisor", db_file=AGENT_STORAGE),
     add_datetime_to_instructions=True,
