@@ -15,6 +15,7 @@ from agno.models.openai import OpenAIChat
 from agno.os import AgentOS
 from agno.db.sqlite import SqliteDb
 from agno.tools.duckduckgo import DuckDuckGoTools
+from supabase_tools import SupabaseTools
 
 # Caminho do banco de dados para armazenar sessões
 AGENT_STORAGE = "tmp/agents.db"
@@ -83,9 +84,31 @@ productivity_agent = Agent(
 )
 
 # =============================================================================
+# AGENTE SUPERVISOR - Visão Global e Delegação
+# =============================================================================
+supervisor_agent = Agent(
+    name="TARS - Supervisor",
+    model=OpenAIChat(id="gpt-4o"),
+    team=[tars_agent, research_agent, productivity_agent],
+    tools=[DuckDuckGoTools(), SupabaseTools()],
+    instructions=[
+        "Você é o Agente Supervisor do sistema TARS.",
+        "Você tem visão global da arquitetura e acesso a todo o banco de dados (via SupabaseTools).",
+        "Você pode e deve delegar tarefas para os especialistas da sua equipe (Gestão, Pesquisa e Produtividade).",
+        "Sempre determine qual agente é o mais adequado para resolver a solicitação do usuário antes de delegar.",
+        "Fale em português brasileiro.",
+    ],
+    db=SqliteDb(db_file=AGENT_STORAGE),
+    add_datetime_to_context=True,
+    add_history_to_context=True,
+    num_history_runs=10,
+    markdown=True,
+)
+
+# =============================================================================
 # CONFIGURAÇÃO DO AGENTOS
 # =============================================================================
-agent_os = AgentOS(agents=[tars_agent, research_agent, productivity_agent])
+agent_os = AgentOS(agents=[supervisor_agent, tars_agent, research_agent, productivity_agent])
 
 app = agent_os.get_app()
 
@@ -106,6 +129,7 @@ if __name__ == "__main__":
     print("  E conecte em: localhost:7777")
     print()
     print("  Agentes disponíveis:")
+    print("  • TARS - Supervisor: Visão global e delegação p/ equipe")
     print("  • TARS - Gestão: Análise e otimização de processos")
     print("  • TARS - Pesquisa: Tendências e análise de mercado")
     print("  • TARS - Produtividade: Tarefas e organização")

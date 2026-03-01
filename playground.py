@@ -245,9 +245,32 @@ tech_agent = Agent(
 )
 
 # =============================================================================
+# AGENTE SUPERVISOR GLOBAL (Delegador principal)
+# =============================================================================
+supervisor_agent = Agent(
+    name="TARS - Supervisor Global",
+    model=OpenAIChat(id="gpt-4o"),
+    team=[tars_agent, research_agent, productivity_agent, support_agent, sales_agent, tech_agent],
+    tools=[DuckDuckGoTools(), SupabaseTools()],
+    instructions=[
+        "Você é o Diretor/Supervisor Global do sistema TARS e da base de Atendimento.",
+        "Você interliga a arquitetura, tendo acesso integral ao banco de dados via SupabaseTools e coordenação de toda a equipe de agentes.",
+        "Receba a requisição do usuário, avalie qual área (Estratégico, Suporte, Vendas, Técnico) é necessária e delegue a tarefa para o agente mais qualificado.",
+        "Forneça respostas sintéticas repassando os insights da sua equipe.",
+        "Fale sempre em português brasileiro de forma polida e gerencial.",
+    ],
+    storage=SqliteStorage(table_name="tars_supervisor", db_file=AGENT_STORAGE),
+    add_datetime_to_instructions=True,
+    add_history_to_messages=True,
+    num_history_responses=10,
+    markdown=True,
+)
+
+# =============================================================================
 # CONFIGURAÇÃO DO PLAYGROUND
 # =============================================================================
 playground = Playground(agents=[
+    supervisor_agent,
     tars_agent, 
     research_agent, 
     productivity_agent,
