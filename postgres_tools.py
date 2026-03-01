@@ -20,7 +20,10 @@ class PostgresTools(Toolkit):
             self.db_url = self.db_url.replace("postgres://", "postgresql://", 1)
             
         try:
-            self.engine = create_engine(self.db_url)
+            self.engine = create_engine(
+                self.db_url,
+                connect_args={'sslmode': 'require'}
+            )
         except Exception as e:
             raise ValueError(f"Erro ao inicializar conexão com o banco de dados: {e}")
         
